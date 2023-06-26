@@ -16,16 +16,16 @@ public class Model {
 		EsameDAO dao = new EsameDAO();
 		this.allEsami = dao.getTuttiEsami();
 	}
-	
+
 	public Set<Esame> calcolaSottoinsiemeEsami(int numeroCrediti) {
 		migliore = new HashSet<>();
 		mediaMigliore = 0.0;
 		
-		Set<Esame> parziale = new HashSet<>();  
+		Set<Esame> parziale = new HashSet<>();
 		
-		cercaMeglio(parziale, 0, numeroCrediti);
+		cerca(parziale, 0, numeroCrediti);
 		
-		return migliore;		
+		return migliore;
 
 	}
 	
@@ -62,38 +62,27 @@ public class Model {
 	}
 
 	private void cerca(Set<Esame> parziale, int L, int numeroCrediti) {
-		
 		int sommaCrediti = sommaCrediti(parziale);
-		
-		if (sommaCrediti > numeroCrediti)
+		if ( sommaCrediti > numeroCrediti )
 			return;
-		
-		if (sommaCrediti == numeroCrediti) {//potrei avere una soluzione qui
+		if(sommaCrediti == numeroCrediti) { //potrei avere una soluzione qui
 			double mediaVoti = calcolaMedia(parziale);
-			if (mediaVoti > mediaMigliore) {
+			if(mediaVoti > mediaMigliore) {
 				mediaMigliore = mediaVoti;
 				migliore = new HashSet<>(parziale);
 			}
 			return;
 		}
-		
-		if (L == allEsami.size())
+		if(L == allEsami.size()) // qui non ha senso andare avanti
 			return;
-		
-		// se arrivo qui, numeroCrediti > sommaCrediti
-		
-		for (Esame e : allEsami) {
-			
-			if (!parziale.contains(e)) {
+		//se arrivo qui, numeroCrediti > sommaCrediti
+		for(Esame e: allEsami) {
+			if(!parziale.contains(e)) {
 				parziale.add(e);
 				cerca(parziale, L+1, numeroCrediti);
 				parziale.remove(e);
-				
 			}
-			
 		}
-		
-		
 	}
 
 	public double calcolaMedia(Set<Esame> esami) {
